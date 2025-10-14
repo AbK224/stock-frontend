@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -37,7 +38,7 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
         if (!Auth::attempt($request->only('email', 'password'))) { // si les informations d'identification sont incorrectes
-            return response()->json(['message' => 'Invalid login details'], 401);
+            return response()->json(['message' => "Mot de passe ou nom d'utilsateur incorrect"], 401);
         }
         $user = User::where('email', $request->email)->firstOrFail(); // Récupère l'utilisateur par email
         // Créez un token pour l'utilisateur
@@ -53,5 +54,37 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete(); // Supprime le token actuel
         return response()->json(['message' => 'Successfully logged out']);
-    }    
+    }  
+    
+    /* // Redirection vers le fournisseur OAuth (google, facebook, linkedin)
+    public function redirectToProvider($provider)
+    {
+        return Socialite::driver($provider) ->redirect();
+    }
+    // Gestion du callback du fournisseur OAuth
+    public function handleProviderCallback($provider)
+    {
+        try {
+            $socialUser = Socialite::driver($provider)->user();
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Authentication failed'], 401);
+        }
+        // Vérifiez si l'utilisateur existe déjà
+        $user = User::where('email', $socialUser->getEmail())->first();
+        if (!$user) {
+            // Si l'utilisateur n'existe pas, créez-en un nouveau
+            $user = User::create([
+                'name' => $socialUser->getName(),
+                'email' => $socialUser->getEmail(),
+                'password' => Hash::make(uniqid()), // Génère un mot de passe aléatoire
+            ]); 
+        }
+        // Créez un token pour l'utilisateur
+        $token = $user->createToken('auth_token')->plainTextToken;
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+        ]);
+    }      
+            */
 }    
