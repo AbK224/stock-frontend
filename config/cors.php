@@ -15,11 +15,22 @@ return [
     |
     */
 
-    'paths' => ['/'],
+    /*
+    |--------------------------------------------------------------------------
+    | Paths that should be CORS enabled
+    |--------------------------------------------------------------------------
+    |
+    | The default was set to the site root ('/'), which does not match
+    | API routes such as /api/register. Add the API wildcard and the
+    | Sanctum CSRF cookie endpoint so preflight requests for API routes
+    | are handled and the proper CORS headers are returned.
+    |
+    */
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['http://localhost:3000'],
 
     'allowed_origins_patterns' => [],
 
@@ -29,6 +40,6 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    'supports_credentials' => true, 
 
 ];

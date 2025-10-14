@@ -122,5 +122,14 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+/* // Note: If you are using the "file" driver, you may specify the path
+// to the file that will determine if the application is in maintenance
+    'providers' => [
+    Laravel\Socialite\SocialiteServiceProvider::class,
+    ],
+    'aliases' => [
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+    ], */
+
 
 ];
