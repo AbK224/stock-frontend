@@ -25,7 +25,7 @@ const Connexion = () => {
             }, 1000);
             //window.location.reload();
         } catch (err) {
-            setMessage("Email ou mot de passe incorrect");
+            setErrorMessage("Email ou mot de passe incorrect");
             console.error(err.response?.data);
         }   
     };
