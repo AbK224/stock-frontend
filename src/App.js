@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Register from './pages/register';
 import Connexion from './pages/connexion';
 import Dashboard from './pages/dashboard';
+import InventoryPage from './pages/InventoryPage';
 
 
 
@@ -23,6 +24,9 @@ function App() {
           <Route path="/connexion" element={<Connexion />} />
             {/* page du tableau de bord */}
           <Route path="/dashboard" element={<Dashboard />} />
+          
+          <Route path="/InventoryPage" element={<InventoryPage />} />
+
             {/* redirection vers la page de connexion pour toute autre route */}
           <Route path="*" element={<Navigate to = "/" />} />
         </Routes>

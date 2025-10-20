@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import InventoryPage from "./InventoryPage";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const Dashboard = () => {
   return (
     <div>
       <h2>Bienvenue sur le tableau de bord</h2>
+      <InventoryPage/>
       <button
         onClick={() => {
           localStorage.removeItem("token");
