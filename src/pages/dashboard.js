@@ -4,9 +4,9 @@ import InventoryPage from "./InventoryPage";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-
   useEffect(() => {
     const token = localStorage.getItem("token");
+    //alert(token);
     if (!token) navigate("/");
   }, [navigate]);
 

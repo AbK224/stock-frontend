@@ -10,7 +10,8 @@ const InventoryPage = () => {
         const loadProducts = async () => {
             try {
                 const response = await fetchProducts();
-                setProducts(response.data);
+                //console.log("Réponse API :", response.data);
+                setProducts(response.data.data);
             } catch (err) {
                 setError("Erreur lors du chargement des produits.");
                 console.error(err);
@@ -51,7 +52,7 @@ const InventoryPage = () => {
                             <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.buying_price} €</td>
                             <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.stock_quantity}</td>
                             <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.threshold_quantity}</td>
-                            <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.expiry_date}</td>
+                            <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.expiration_date}</td>
                             <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                                 {product.stock_quantity === 0 ? (
                                     <span style={{ color: "orange" }}>Out of stock</span>
