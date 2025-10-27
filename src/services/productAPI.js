@@ -1,5 +1,5 @@
 import axios from "axios";
-
+// créer une instance axios avec les configurations de base 
 const productAPI = axios.create({
     baseURL: "http://127.0.0.1:8000/api",
     headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }, // ajouter le token d'authentification
