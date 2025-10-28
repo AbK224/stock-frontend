@@ -18,7 +18,8 @@ const Connexion = () => {
         // appeler le service de connexion
         try {
             const res = await loginUser(form);
-            localStorage.setItem('token', res.data.token); // Stocker le token dans le localStorage
+            console.log("token1", res.data.access_token);
+            localStorage.setItem('token', res.data.access_token);// Stocker le token dans le localStorage
             setMessage("Connexion réussie !");
             setTimeout(() => {
                 navigate("/dashboard"); // Rediriger vers le tableau de bord après la connexion réussie
