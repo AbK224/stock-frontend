@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {registerUser} from "../services/auth";  
+import {registerUser} from "../services/api";  
 
 
 // Composant d'inscription
