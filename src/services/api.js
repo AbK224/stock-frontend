@@ -24,9 +24,9 @@ export const logoutUser = () => {
 
 
 // Récupération du token et ajout automatique aux headers
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+api.interceptors.request.use((config) => { // Intercepteur de requête 
+  const token = localStorage.getItem("token"); // Récupérer le token depuis le localStorage
+  if (token) config.headers.Authorization = `Bearer ${token}`; // si le token existe, l'ajouter aux headers
   return config;
 });
 
