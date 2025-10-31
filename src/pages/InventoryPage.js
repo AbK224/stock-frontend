@@ -16,7 +16,7 @@ const InventoryPage = () => {
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                const response = await fetchProducts();
+                const response = await fetchProducts(); //
                 console.log("Réponse API produits :", response.data);
 
                 let productList = [];
@@ -48,7 +48,8 @@ const InventoryPage = () => {
     useEffect(() => {
     const loadData = async () => {
         try {
-            const [productRes, categoryRes] = await Promise.all([
+            //
+            const [productRes, categoryRes] = await Promise.all([ // paralléliser les requêtes 
                 fetchProducts(),
                 fetchCategories(),
             ]);
@@ -79,7 +80,7 @@ const InventoryPage = () => {
 }, []);
 
 
-    // 🔍 Recherche dynamique
+    // Recherche dynamique
     useEffect(() => {
         const filtered = products.filter((product) =>
             product.name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -87,9 +88,9 @@ const InventoryPage = () => {
         setFilteredProducts(filtered);
     }, [searchTerm, products]);
 
-    // 🔹 Quand un produit est ajouté depuis la modale
+    // Quand un produit est ajouté depuis la modale
     const handleProductAdded = (newProduct) => {
-        setProducts((prev) => [newProduct, ...prev]);
+        setProducts((prev) => [newProduct, ...prev]); 
         toast.success("Produit ajouté avec succès !");
         setShowModal(false);
     };
@@ -115,7 +116,7 @@ const InventoryPage = () => {
                     cursor: "pointer",
                 }}
             >
-                ➕ Ajouter un produit
+                Ajouter un produit
             </button>
 
             {/* Champ de recherche */}
