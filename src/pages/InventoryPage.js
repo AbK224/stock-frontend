@@ -11,72 +11,46 @@ const InventoryPage = () => {
     const [error, setError] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [categories, setCategories] = useState([]); // ⚙️ à connecter plus tard à ton API /categories
+    // pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [lastPage, setLastPage] = useState(1);
 
-    // 🔹 Charger les produits
-    useEffect(() => {
-        const loadProducts = async () => {
-            try {
-                const response = await fetchProducts();
-                console.log("Réponse API produits :", response.data);
-
-                let productList = [];
-
-                if (Array.isArray(response.data)) {
-                    productList = response.data;
-                } else if (Array.isArray(response.data.data)) {
-                    productList = response.data.data;
-                } else if (Array.isArray(response.data.data?.data)) {
-                    productList = response.data.data.data;
-                } else {
-                    console.error("Format inattendu :", response.data);
-                }
-
-                setProducts(productList);
-                setFilteredProducts(productList);
-
-            } catch (err) {
-                console.error("Erreur lors du chargement des produits :", err);
-                setError("Erreur lors du chargement des produits.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadProducts();
-    }, []);
-    // 🔹 Charger les catégories
-    useEffect(() => {
-    const loadData = async () => {
+    // 🔹 Charger les produits et categories
+    const loadData = async (page = 1) => {
         try {
-            const [productRes, categoryRes] = await Promise.all([
-                fetchProducts(),
+            setLoading(true);
+            const [productsRes, categoriesRes] = await Promise.all([
+                fetchProducts(page),
                 fetchCategories(),
             ]);
 
-            // 🔹 Extraction des produits
-            const productList =
-                productRes.data?.data?.data ||
-                productRes.data?.data ||
-                productRes.data ||
-                [];
+            console.log("Réponse des produits :", productsRes.data);
 
+            // verifier la structure de la réponse
+            const data = productsRes.data;
+            const productList = 
+            Array.isArray(data.data)
+            ? data.data
+            : Array.isArray(data)
+            ? data
+            : data?.data?.data || [];
             setProducts(productList);
             setFilteredProducts(productList);
+            setCategories(categoriesRes.data || []);
 
-            // 🔹 Extraction des catégories
-            const categoryList = categoryRes.data || [];
-            setCategories(categoryList);
-
+            // recuperation des infos de pagination
+            setCurrentPage(data.current_page ?? 1);
+            setLastPage(data.last_page ?? 1);
         } catch (err) {
-            console.error("Erreur lors du chargement :", err);
+            console.error("Erreur lors du chargement des produits :", err);
             setError("Erreur lors du chargement des données.");
         } finally {
             setLoading(false);
         }
     };
-
-    loadData();
-}, []);
+    useEffect(() => {
+        loadData( currentPage );
+    }, [currentPage]);
 
 
     // 🔍 Recherche dynamique
@@ -93,6 +67,17 @@ const InventoryPage = () => {
         toast.success("Produit ajouté avec succès !");
         setShowModal(false);
     };
+
+    // 🔹 Pagination handlers
+    const handlePrevious = () => {
+        if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+    };
+
+    const handleNext = () => {
+        if (currentPage < lastPage) setCurrentPage((prev) => prev + 1);
+    };
+
+    // rendu
 
     if (loading) return <div>Chargement des produits...</div>;
     if (error) return <div style={{ color: "red" }}>{error}</div>;
@@ -168,6 +153,51 @@ const InventoryPage = () => {
                     )}
                 </tbody>
             </table>
+
+            {/* Pagination */}
+            <div
+                style={{
+                marginTop: "20px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "10px",
+                }}
+                >
+                <button
+                onClick={handlePrevious}
+                disabled={currentPage === 1}
+                style={{
+                    padding: "8px 12px",
+                    backgroundColor: currentPage === 1 ? "#ccc" : "#007bff",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: currentPage === 1 ? "not-allowed" : "pointer",
+                }}
+                >
+                ⬅️ Previous
+                </button>
+
+                <span>
+                Page {currentPage} sur {lastPage}
+                </span>
+
+                <button
+                onClick={handleNext}
+                disabled={currentPage === lastPage}
+                style={{
+                    padding: "8px 12px",
+                    backgroundColor: currentPage === lastPage ? "#ccc" : "#007bff",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: currentPage === lastPage ? "not-allowed" : "pointer",
+                }}
+                >
+                Next ➡️
+                </button>
+            </div>
 
             {/* Modale d’ajout */}
             {showModal && (
