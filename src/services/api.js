@@ -6,12 +6,16 @@ const api = axios.create({
   withCredentials: true, // pour inclure les cookies dans les requêtes 
 });
 
+// ✅ Intercepteur : injecte le token AVANT chaque requête
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    console.warn("⚠️ Aucun token trouvé dans localStorage");
+  }
   return config;
-});
-
+}, (error) => Promise.reject(error));
 // 🔹 Authentification
 export const registerUser = (userData) => api.post("/register", userData);
 export const loginUser = (credentials) => api.post("/login", credentials);
@@ -21,18 +25,16 @@ export const logoutUser = () => api.post("/logout");
 // Récupération du token et ajout automatique aux headers
 
 
-// produits avec pagination
+// produits
 export const fetchProducts = (page = 1) => api.get(`/products?page=${page}`);
 
+export const addProduct = (productData) => api.post("/products", productData);
 
-// 🔹 Liste des produits
-//export const fetchProducts = () => api.get("/products");
 
-// liste des catégories
+
+//catégories
 export const fetchCategories = () => api.get("/categories");
 
-// ajouter un nouveau produit
-export const addProduct = (productData) => api.post("/products", productData);
 
 
 export default api;

@@ -10,7 +10,7 @@ const AddProductModal = ({ onClose, onProductAdded, categories }) => {
     buying_price: "",
     selling_price: "",
     stock_quantity: "",
-    threshold_quantity: "",
+    treshold_quantity: "",
     expiration_date: "",
   });
 
@@ -26,7 +26,7 @@ const AddProductModal = ({ onClose, onProductAdded, categories }) => {
     try {
       const response = await addProduct(formData);
       toast.success("Produit ajouté avec succès !");
-      onProductAdded(response.data); // maj liste
+      onProductAdded(response.data.data); // maj liste
       onClose();
     } catch (error) {
       if (error.response?.status === 422) {
@@ -80,7 +80,7 @@ const AddProductModal = ({ onClose, onProductAdded, categories }) => {
           <input type="number" name="stock_quantity" value={formData.stock_quantity} onChange={handleChange} />
 
           <label>Seuil :</label>
-          <input type="number" name="threshold_quantity" value={formData.threshold_quantity} onChange={handleChange} />
+          <input type="number" name="treshold_quantity" value={formData.treshold_quantity} onChange={handleChange} />
 
           <label>Date d’expiration :</label>
           <input type="date" name="expiration_date" value={formData.expiration_date} onChange={handleChange} />

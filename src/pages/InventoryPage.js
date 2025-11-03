@@ -131,7 +131,7 @@ const InventoryPage = () => {
                                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.name}</td>
                                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.buying_price} €</td>
                                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.stock_quantity}</td>
-                                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.threshold_quantity}</td>
+                                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.treshold_quantity}</td>
                                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.expiration_date}</td>
                                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                                     {product.stock_quantity === 0 ? (

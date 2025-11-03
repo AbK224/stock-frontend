@@ -1,29 +1,11 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import InventoryPage from "./InventoryPage";
+
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    //alert(token);
-    if (!token) navigate("/");
-  }, [navigate]);
-
   return (
     <div>
-      <h2>Bienvenue sur le tableau de bord</h2>
-      <InventoryPage/>
-      <button
-        onClick={() => {
-          localStorage.removeItem("token");
-          navigate("/");
-        }}
-      >
-        Déconnexion
-      </button>
+      <h1>Bienvenue sur le Dashboard</h1>
+      <p>Utilisez la barre latérale pour naviguer dans l'application.</p>
     </div>
   );
-};
-
+}
 export default Dashboard;
