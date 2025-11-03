@@ -1,35 +1,64 @@
-import './App.css';
-import { RecoilRoot } from 'recoil';
-import { Toaster } from 'sonner';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Register from './pages/register';
-import Connexion from './pages/connexion';
-import Dashboard from './pages/dashboard';
-import InventoryPage from './pages/InventoryPage';
+import "./App.css";
+import { RecoilRoot } from "recoil";
+import { Toaster } from "sonner";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+import Register from "./pages/register";
+import Connexion from "./pages/connexion";
+import InventoryPage from "./pages/InventoryPage";
+import Dashboard from "./pages/dashboard"; // 🆕 à créer
+import Sidebar from "./components/SideBar";
 
+// 🔹 Composant qui affiche la Sidebar seulement si l’utilisateur est connecté
+const Layout = ({ children }) => {
+  const location = useLocation();
+  const hideSidebarRoutes = ["/", "/connexion", "/register"]; // routes sans sidebar
+  const hideSidebar = hideSidebarRoutes.includes(location.pathname);
 
+  return (
+    <div style={{ display: "flex" }}>
+      {!hideSidebar && <Sidebar />}
+      <div style={{ marginLeft: hideSidebar ? 0 : "230px", padding: "20px", flex: 1 }}>
+        {children}
+      </div>
+    </div>
+  );
+};
+
+// 🔒 Protection des routes internes
+const ProtectedRoute = ({ element }) => {
+  const token = localStorage.getItem("token");
+  return token ? element : <Navigate to="/connexion" replace />;
+};
 
 function App() {
   return (
     <RecoilRoot>
       <Router>
-      <Toaster position="top-right" richColors />
+        <Layout>
+          <Toaster position="top-right" richColors />
 
+          <Routes>
+            {/* 🔹 Page par défaut → Connexion */}
+            <Route path="/" element={<Connexion />} />
 
-        <Routes>
-            {/* page de connexion par defaut */}
-          <Route path="/" element={<Connexion />} />
-            {/* page d'inscription */}
-          <Route path="/register" element={<Register />} />
-          <Route path="/connexion" element={<Connexion />} />
-            {/* page du tableau de bord */}
-          <Route path="/dashboard" element={<Dashboard />} />
-          
-          <Route path="/InventoryPage" element={<InventoryPage />} />
+            {/* 🔹 Authentification */}
+            <Route path="/register" element={<Register />} />
+            <Route path="/connexion" element={<Connexion />} />
 
-            {/* redirection vers la page de connexion pour toute autre route */}
-          <Route path="*" element={<Navigate to = "/" />} />
-        </Routes>
+            {/* 🔹 Routes protégées (requièrent un token) */}
+            <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
+            <Route path="/inventorypage" element={<ProtectedRoute element={<InventoryPage />} />} />
+
+            {/* 🔹 Redirection pour routes inconnues */}
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </Layout>
       </Router>
     </RecoilRoot>
   );
