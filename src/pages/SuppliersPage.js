@@ -11,11 +11,20 @@ const SuppliersPage = () => {
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
 
-  const loadSuppliers = async () => {
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+
+  // 🔹 Charger les fournisseurs avec pagination
+
+  const loadSuppliers = async (page = 1) => {
     try {
       setLoading(true);
-      const response = await fetchSuppliers();
+      const response = await fetchSuppliers(page);
       const data = response.data;
+
+      console.log("Réponse fournisseurs :", data);
 
       const supplierList =
         Array.isArray(data.data) ? data.data :
@@ -24,6 +33,10 @@ const SuppliersPage = () => {
 
       setSuppliers(supplierList);
       setFilteredSuppliers(supplierList);
+
+      // Récupération des infos de pagination
+      setCurrentPage(data.current_page ?? 1);
+      setLastPage(data.last_page ?? 1);
     } catch (err) {
       console.error("Erreur lors du chargement :", err);
       setError("Erreur lors du chargement des fournisseurs");
@@ -33,8 +46,10 @@ const SuppliersPage = () => {
   };
 
   useEffect(() => {
-    loadSuppliers();
-  }, []);
+    loadSuppliers(currentPage);
+  }, [currentPage]);
+
+  // Recherche dynamique
 
   useEffect(() => {
     const filtered = suppliers.filter((supplier) =>
@@ -43,12 +58,22 @@ const SuppliersPage = () => {
     setFilteredSuppliers(filtered);
   }, [searchTerm, suppliers]);
 
-  const handleSupplierAdded = (newSupplier) => {
-    setSuppliers((prev) => [newSupplier, ...prev]);
-    setFilteredSuppliers((prev) => [newSupplier, ...prev]);
+  // quand un fournisseur est ajouté
+
+  const handleSupplierAdded = async (newSupplier) => {
     toast.success("Fournisseur ajouté !");
     setShowModal(false);
+    await loadSuppliers(currentPage); // recharger la liste depuis l’API
   };
+
+  // Gestion de la pagination
+  const handlePrevious = () => {
+    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
+  const handleNext = () => {
+    if (currentPage < lastPage) setCurrentPage((prev) => prev + 1);
+  };
+
 
   if (loading) return <div>Chargement...</div>;
   if (error) return <div style={{ color: "red" }}>{error}</div>;
@@ -118,6 +143,51 @@ const SuppliersPage = () => {
           )}
         </tbody>
       </table>
+
+      {/* pagination */}
+      <div
+        style={{
+          marginTop: "20px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "10px",
+        }}
+      >
+        <button
+          onClick={handlePrevious}
+          disabled={currentPage === 1}
+          style={{
+            padding: "8px 12px",
+            backgroundColor: currentPage === 1 ? "#ccc" : "#007bff",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: currentPage === 1 ? "not-allowed" : "pointer",
+          }}
+        >
+          ⬅️ Previous
+        </button>
+
+        <span>
+          Page {currentPage} sur {lastPage}
+        </span>
+
+        <button
+          onClick={handleNext}
+          disabled={currentPage === lastPage}
+          style={{
+            padding: "8px 12px",
+            backgroundColor: currentPage === lastPage ? "#ccc" : "#007bff",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: currentPage === lastPage ? "not-allowed" : "pointer",
+          }}
+        >
+          Next ➡️
+        </button>
+      </div>
 
       {showModal && (
         <AddSupplierModal
