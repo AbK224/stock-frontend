@@ -36,7 +36,7 @@ export const addProduct = (productData) => api.post("/products", productData);
 export const fetchCategories = () => api.get("/categories");
 
 // Fournisseurs
-export const fetchSuppliers = (page = 1) => api.get("/suppliers?page=${page}");
+export const fetchSuppliers = (page = 1) => api.get(`/suppliers?page=${page}`);
 export const addSupplier = (supplierData) => api.post("/suppliers", supplierData);
 
 export default api;
