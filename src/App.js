@@ -13,6 +13,7 @@ import Connexion from "./pages/connexion";
 import InventoryPage from "./pages/InventoryPage";
 import Dashboard from "./pages/dashboard"; // 🆕 à créer
 import Sidebar from "./components/SideBar";
+import SuppliersPage from "./pages/SuppliersPage";
 
 // 🔹 Composant qui affiche la Sidebar seulement si l’utilisateur est connecté
 const Layout = ({ children }) => {
@@ -54,6 +55,7 @@ function App() {
             {/* 🔹 Routes protégées (requièrent un token) */}
             <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
             <Route path="/inventorypage" element={<ProtectedRoute element={<InventoryPage />} />} />
+            <Route path="/suppliers" element={<ProtectedRoute element={<SuppliersPage />} />} />
 
             {/* 🔹 Redirection pour routes inconnues */}
             <Route path="*" element={<Navigate to="/" />} />
