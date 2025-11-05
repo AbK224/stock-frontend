@@ -22,7 +22,7 @@ export const loginUser = (credentials) => api.post("/login", credentials);
 export const logoutUser = () => api.post("/logout");
 
 
-// Récupération du token et ajout automatique aux headers
+// 🔹 Gestion des
 
 
 // produits
@@ -35,7 +35,9 @@ export const addProduct = (productData) => api.post("/products", productData);
 //catégories
 export const fetchCategories = () => api.get("/categories");
 
-
+// Fournisseurs
+export const fetchSuppliers = (page = 1) => api.get("/suppliers?page=${page}");
+export const addSupplier = (supplierData) => api.post("/suppliers", supplierData);
 
 export default api;
 
