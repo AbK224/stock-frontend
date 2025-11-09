@@ -3,7 +3,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { addProduct } from "../services/api";
 
-const AddProductModal = ({ onClose, onProductAdded, categories }) => {
+
+const AddProductModal = ({ onClose, onProductAdded, categories, suppliers }) => {
   const [formData, setFormData] = useState({
     name: "",
     category_id: "",
@@ -60,6 +61,22 @@ const AddProductModal = ({ onClose, onProductAdded, categories }) => {
           <label>Nom :</label>
           <input name="name" value={formData.name} onChange={handleChange} />
           {errors.name && <p style={{ color: "red" }}>{errors.name[0]}</p>}
+
+        <label>Fournisseur :</label>
+          <select
+            name="supplier_id"
+            value={formData.supplier_id}
+            onChange={handleChange}
+            required
+          >
+            <option value="">-- Sélectionner un fournisseur --</option>
+            {suppliers.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+
 
           <label>Catégorie :</label>
           <select name="category_id" value={formData.category_id} onChange={handleChange}> 

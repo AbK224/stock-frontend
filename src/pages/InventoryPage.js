@@ -1,4 +1,4 @@
-import { fetchProducts, fetchCategories } from "../services/api";
+import { fetchProducts, fetchCategories, fetchSuppliers } from "../services/api";
 import { useState, useEffect } from "react";
 import AddProductModal from "../components/AddProductModal";
 import { Toaster, toast } from "sonner";
@@ -10,18 +10,20 @@ const InventoryPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [showModal, setShowModal] = useState(false);
-    const [categories, setCategories] = useState([]); // ⚙️ à connecter plus tard à ton API /categories
+    const [categories, setCategories] = useState([]);
+    const [suppliers, setSuppliers] = useState([]);
     // pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
 
-    // 🔹 Charger les produits et categories
+    // 🔹 Charger les produits + categories + suppliers
     const loadData = async (page = 1) => {
         try {
             setLoading(true);
-            const [productsRes, categoriesRes] = await Promise.all([
+            const [productsRes, categoriesRes, suppliersRes] = await Promise.all([
                 fetchProducts(page),
                 fetchCategories(),
+                fetchSuppliers(),
             ]);
 
             console.log("Réponse des produits :", productsRes.data);
@@ -37,6 +39,10 @@ const InventoryPage = () => {
             setProducts(productList);
             setFilteredProducts(productList);
             setCategories(categoriesRes.data || []);
+            setSuppliers(suppliersRes.data?.data || suppliersRes.data || []);
+
+
+
 
             // recuperation des infos de pagination
             setCurrentPage(data.current_page ?? 1);
@@ -129,7 +135,7 @@ const InventoryPage = () => {
                         filteredProducts.map((product) => (
                             <tr key={product.id}>
                                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.name}</td>
-                                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.buying_price} €</td>
+                                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.buying_price} F CFA</td>
                                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.stock_quantity}</td>
                                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.treshold_quantity}</td>
                                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.expiration_date}</td>
@@ -205,6 +211,7 @@ const InventoryPage = () => {
                     onClose={() => setShowModal(false)}
                     onProductAdded={handleProductAdded}
                     categories={categories}
+                    suppliers={suppliers}
                 />
             )}
         </div>
