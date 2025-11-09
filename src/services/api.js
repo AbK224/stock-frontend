@@ -39,5 +39,9 @@ export const fetchCategories = () => api.get("/categories");
 export const fetchSuppliers = (page = 1) => api.get(`/suppliers?page=${page}`);
 export const addSupplier = (supplierData) => api.post("/suppliers", supplierData);
 
+// Commandes
+export const fetchOrders = (page = 1) => api.get(`/orders?page=${page}`);
+export const addOrder = (orderData) => api.post("/orders", orderData)
+
 export default api;
 
