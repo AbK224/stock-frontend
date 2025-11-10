@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { fetchOrders } from "../services/api"; // 🔹 à ajouter dans api.js
+import { fetchOrders, deleteOrder } from "../services/api"; // 🔹 à ajouter dans api.js
+import Swal from "sweetalert2";
 import { Toaster,toast } from "sonner";
 import AddOrderModal from "../components/AddOrderModal";
+import EditOrderModal from "../components/EditOrderModal"
 
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
@@ -10,6 +12,9 @@ const OrdersPage = () => {
   const [error, setError] = useState("");
   const [showHistory, setShowHistory] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,7 +63,7 @@ const OrdersPage = () => {
       setFilteredOrders(orders);
     } else {
       setFilteredOrders(
-        orders.filter((o) => !["delivered", "returned"].includes(o.status))
+        orders.filter((o) => !["received", "returned"].includes(o.status))
       );
     }
   }, [showHistory, orders]);
@@ -75,7 +80,7 @@ const OrdersPage = () => {
     const colors = {
       confirmed: "#3b82f6",
       pending: "#facc15",
-      delivered: "#22c55e",
+      received: "#22c55e",
       delayed: "#f97316",
       returned: "#ef4444",
     };
@@ -88,6 +93,40 @@ const OrdersPage = () => {
       fontWeight: "bold",
     };
   };
+  // 🔹 Modifier une commande
+  const handleEdit = (order) => {
+    setSelectedOrder(order);
+    setShowEditModal(true);
+  };
+
+  // 🔹 Supprimer une commande
+  const handleDelete = async (id) => {
+  const result = await Swal.fire({
+    title: "Supprimer cette commande ?",
+    text: "Cette action est irréversible.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Oui, supprimer",
+    cancelButtonText: "Annuler",
+  });
+
+  if (result.isConfirmed) {
+    try {
+      await deleteOrder(id);
+      toast.success("Commande supprimée !");
+      loadOrders();
+    } catch (error) {
+      console.error("Erreur suppression :", error);
+      toast.error("Erreur lors de la suppression.");
+    }
+  }
+};
+
+
+
+
 
   if (loading) return <div>Chargement des commandes...</div>;
   if (error) return <div style={{ color: "red" }}>{error}</div>;
@@ -137,6 +176,8 @@ const OrdersPage = () => {
             <th style={{ border: "1px solid #ddd", padding: "8px" }}>Order ID</th>
             <th style={{ border: "1px solid #ddd", padding: "8px" }}>Expected Delivery</th>
             <th style={{ border: "1px solid #ddd", padding: "8px" }}>Status</th>
+            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Action</th>
+
           </tr>
         </thead>
         <tbody>
@@ -161,6 +202,37 @@ const OrdersPage = () => {
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                   <span style={getStatusStyle(order.status)}>{order.status}</span>
                 </td>
+
+              {/* ✅ Actions */}
+              <td style={{ ...{ border: "1px solid #ddd", padding: "8px" }, textAlign: "center" }}>
+                <button
+                  onClick={() => handleEdit(order)}
+                  style={{
+                    marginRight: "8px",
+                    backgroundColor: "#007bff",
+                    color: "#fff",
+                    border: "none",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  ✏️ Modifier
+                </button>
+                <button
+                  onClick={() => handleDelete(order.id)}
+                  style={{
+                    backgroundColor: "#dc3545",
+                    color: "#fff",
+                    border: "none",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  🗑️ Supprimer
+                </button>
+              </td>
               </tr>
             ))
           ) : (
@@ -224,6 +296,14 @@ const OrdersPage = () => {
             setOrders((prev) => [newOrder, ...prev]);
             toast.success("Commande ajoutée !");
           }}
+        />
+      )}
+
+      {showEditModal && (
+        <EditOrderModal
+          order={selectedOrder}
+          onClose={() => setShowEditModal(false)}
+          onOrderUpdated={loadOrders}
         />
       )}
     </div>

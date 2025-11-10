@@ -61,7 +61,7 @@ function App() {
             
 
             {/* 🔹 Redirection pour routes inconnues */}
-            <Route path="*" element={<Navigate to="/" />} />
+            <Route path="*" element={<Navigate to="/dashboard" />} />
           </Routes>
         </Layout>
       </Router>

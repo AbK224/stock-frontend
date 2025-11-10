@@ -41,7 +41,13 @@ export const addSupplier = (supplierData) => api.post("/suppliers", supplierData
 
 // Commandes
 export const fetchOrders = (page = 1) => api.get(`/orders?page=${page}`);
-export const addOrder = (orderData) => api.post("/orders", orderData)
+export const addOrder = (orderData) => api.post("/orders", orderData);
+// 🔹 Supprimer une commande
+export const deleteOrder = (id) => api.delete(`/orders/${id}`);
+
+// 🔹 Mettre à jour une commande
+export const updateOrder = (id, data) => api.put(`/orders/${id}`, data);
+
 
 export default api;
 
