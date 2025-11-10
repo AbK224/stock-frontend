@@ -142,7 +142,7 @@ const InventoryPage = () => {
                                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                                     {product.stock_quantity === 0 ? (
                                         <span style={{ color: "orange" }}>Out of stock</span>
-                                    ) : product.stock_quantity <= product.threshold_quantity ? (
+                                    ) : product.stock_quantity <= product.treshold_quantity ? (
                                         <span style={{ color: "red" }}>Rupture de stock</span>
                                     ) : (
                                         <span style={{ color: "green" }}>In Stock</span>
