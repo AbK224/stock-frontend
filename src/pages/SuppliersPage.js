@@ -130,7 +130,7 @@ const SuppliersPage = () => {
                   {s.takes_back_returns ? "Oui" : "Non"}
                 </td>
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  -
+                 {s.on_the_way_count ?? 0}
                 </td>
               </tr>
             ))
