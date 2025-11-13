@@ -29,6 +29,12 @@ export const logoutUser = () => api.post("/logout");
 export const fetchProducts = (page = 1) => api.get(`/products?page=${page}`);
 
 export const addProduct = (productData) => api.post("/products", productData);
+// Supprimer un produit
+export const deleteProduct = (id) => api.delete(`/products/${id}`);
+
+// Mettre à jour un produit
+export const updateProduct = (id, data) => api.put(`/products/${id}`, data);
+
 
 
 
@@ -38,6 +44,12 @@ export const fetchCategories = () => api.get("/categories");
 // Fournisseurs
 export const fetchSuppliers = (page = 1) => api.get(`/suppliers?page=${page}`);
 export const addSupplier = (supplierData) => api.post("/suppliers", supplierData);
+
+// supprimer un fournisseur
+export const deleteSupplier= (id) => api.delete(`/suppliers/${id}`);
+
+// Mettre à jour un fournisseur
+export const updateSupplier = (id, data) => api.put(`/suppliers/${id}`, data);
 
 // Commandes
 export const fetchOrders = (page = 1) => api.get(`/orders?page=${page}`);

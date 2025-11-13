@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { fetchSuppliers } from "../services/api";
+import { fetchSuppliers, deleteSupplier } from "../services/api";
+import Swal from "sweetalert2";
 import { Toaster, toast } from "sonner";
 import AddSupplierModal from "../components/AddSupplierModal";
+
 
 const SuppliersPage = () => {
   const [suppliers, setSuppliers] = useState([]);
@@ -10,6 +12,7 @@ const SuppliersPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [selectedSupplier, setSelectedSupplier] = useState(null);
 
 
   // Pagination
@@ -73,6 +76,44 @@ const SuppliersPage = () => {
   const handleNext = () => {
     if (currentPage < lastPage) setCurrentPage((prev) => prev + 1);
   };
+  const handleDelete = async (id) => {
+  const result = await Swal.fire(
+    {
+    title: "Supprimer cette commande ?",
+    text: "Cette action est irréversible.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Oui, supprimer",
+    cancelButtonText: "Annuler",
+    });
+    if (result.isConfirmed){
+      try{
+        await deleteSupplier(id);
+        toast.success("Fournisseur supprimé !");
+        setSuppliers((prev) => prev.filter((s) => s.id !== id));
+      }catch(error){
+        console.error("Erreur suppression :", error);
+        toast.error("Erreur lors de la suppression.");
+      }
+    }
+  };
+    /* if (!window.confirm("Voulez-vous vraiment supprimer ce fournisseur ?")) return;
+    try {
+      await deleteSupplier(id);
+      toast.success("Fournisseur supprimé !");
+      setSuppliers((prev) => prev.filter((s) => s.id !== id));
+    } catch (error) {
+      console.error("Erreur lors de la suppression :", error);
+      toast.error("Erreur lors de la suppression du fournisseur.");
+    }
+  }; */
+
+  const handleEdit = (supplier) => {
+    setSelectedSupplier(supplier);
+    setShowModal(true);
+  };
 
 
   if (loading) return <div>Chargement...</div>;
@@ -115,6 +156,8 @@ const SuppliersPage = () => {
             <th style={{ border: "1px solid #ddd", padding: "8px" }}>Email</th>
             <th style={{ border: "1px solid #ddd", padding: "8px" }}>accepte retour ?</th>
             <th style={{ border: "1px solid #ddd", padding: "8px" }}>On the way</th>
+            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Action</th>
+
           </tr>
         </thead>
         <tbody>
@@ -131,6 +174,36 @@ const SuppliersPage = () => {
                 </td>
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                  {s.on_the_way_count ?? 0}
+                </td>
+                 {/* ✅ Actions */}
+                <td style={{ ...{ border: "1px solid #ddd", padding: "8px" }, textAlign: "center" }}>
+                    <button
+                    onClick={() => handleEdit(s)}
+                    style={{
+                        marginRight: "8px",
+                        backgroundColor: "#007bff",
+                        color: "#fff",
+                        border: "none",
+                        padding: "5px 10px",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                    }}
+                    >
+                    ✏️ Modifier
+                    </button>
+                    <button
+                    onClick={() => handleDelete(s.id)}
+                    style={{
+                        backgroundColor: "#dc3545",
+                        color: "#fff",
+                        border: "none",
+                        padding: "5px 10px",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                    }}
+                    >
+                    🗑️ Supprimer
+                    </button>
                 </td>
               </tr>
             ))
@@ -191,8 +264,12 @@ const SuppliersPage = () => {
 
       {showModal && (
         <AddSupplierModal
-          onClose={() => setShowModal(false)}
+          onClose={() => {
+            setShowModal(false);
+            setSelectedSupplier(null);
+          }}
           onSupplierAdded={handleSupplierAdded}
+          supplierToEdit={selectedSupplier}
         />
       )}
     </div>

@@ -1,7 +1,8 @@
-import { fetchProducts, fetchCategories, fetchSuppliers } from "../services/api";
+import { fetchProducts, fetchCategories, fetchSuppliers, deleteProduct  } from "../services/api";
 import { useState, useEffect } from "react";
 import AddProductModal from "../components/AddProductModal";
 import { Toaster, toast } from "sonner";
+import Swal from "sweetalert2";
 
 const InventoryPage = () => {
     const [products, setProducts] = useState([]);
@@ -12,6 +13,7 @@ const InventoryPage = () => {
     const [showModal, setShowModal] = useState(false);
     const [categories, setCategories] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
+    const [selectedProduct, setSelectedProduct] = useState(null);
     // pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
@@ -82,6 +84,45 @@ const InventoryPage = () => {
     const handleNext = () => {
         if (currentPage < lastPage) setCurrentPage((prev) => prev + 1);
     };
+    const handleDelete = async (id) => {
+    const result = await Swal.fire({
+        title: "Supprimer ce produit du stock ?",
+        text: "Cette action est irréversible.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Oui, supprimer",
+        cancelButtonText: "Annuler",
+        })
+    if (result.isConfirmed){
+        try{
+            await deleteProduct(id);
+            toast.success("Produit supprimé !");
+            setProducts((prev) => prev.filter((p) => p.id !== id)); 
+        }catch (error) {
+            console.error("Erreur lors de la suppression :", error);
+            toast.error("Erreur lors de la suppression du produit.");
+        }
+     }
+    };
+      /*   if (!window.confirm("Voulez-vous vraiment supprimer ce produit ?")) return;
+
+        try {
+            await deleteProduct(id);
+            toast.success("Produit supprimé !");
+            setProducts((prev) => prev.filter((p) => p.id !== id));
+        } catch (error) {
+            console.error("Erreur lors de la suppression :", error);
+            toast.error("Erreur lors de la suppression du produit.");
+        }
+    }; */
+
+    const handleEdit = (product) => {
+        setSelectedProduct(product);
+        setShowModal(true);
+    };
+
 
     // rendu
 
@@ -128,6 +169,8 @@ const InventoryPage = () => {
                         <th style={{ border: "1px solid #ddd", padding: "8px" }}>Seuil</th>
                         <th style={{ border: "1px solid #ddd", padding: "8px" }}>Date d’expiration</th>
                         <th style={{ border: "1px solid #ddd", padding: "8px" }}>Disponibilité</th>
+                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Action</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -147,6 +190,36 @@ const InventoryPage = () => {
                                     ) : (
                                         <span style={{ color: "green" }}>In Stock</span>
                                     )}
+                                </td>
+                                  {/* ✅ Actions */}
+                                <td style={{ ...{ border: "1px solid #ddd", padding: "8px" }, textAlign: "center" }}>
+                                    <button
+                                    onClick={() => handleEdit(product)}
+                                    style={{
+                                        marginRight: "8px",
+                                        backgroundColor: "#007bff",
+                                        color: "#fff",
+                                        border: "none",
+                                        padding: "5px 10px",
+                                        borderRadius: "5px",
+                                        cursor: "pointer",
+                                    }}
+                                    >
+                                    ✏️ Modifier
+                                    </button>
+                                    <button
+                                    onClick={() => handleDelete(product.id)}
+                                    style={{
+                                        backgroundColor: "#dc3545",
+                                        color: "#fff",
+                                        border: "none",
+                                        padding: "5px 10px",
+                                        borderRadius: "5px",
+                                        cursor: "pointer",
+                                    }}
+                                    >
+                                    🗑️ Supprimer
+                                    </button>
                                 </td>
                             </tr>
                         ))
@@ -208,10 +281,14 @@ const InventoryPage = () => {
             {/* Modale d’ajout */}
             {showModal && (
                 <AddProductModal
-                    onClose={() => setShowModal(false)}
+                    onClose={() =>{
+                    setShowModal(false);
+                    setSelectedProduct(null);
+                    }}
                     onProductAdded={handleProductAdded}
                     categories={categories}
                     suppliers={suppliers}
+                    productToEdit={selectedProduct}
                 />
             )}
         </div>
