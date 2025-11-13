@@ -1,17 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { addSupplier } from "../services/api";
+import { addSupplier,updateSupplier } from "../services/api";
 
-const AddSupplierModal = ({ onClose, onSupplierAdded }) => {
+const AddSupplierModal = ({ onClose, onSupplierAdded, supplierToEdit }) => {
+  const isEditing = !!supplierToEdit;
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
+    main_product: "",
     takes_back_returns: false,
-    main_product: "", // ✅ nouveau champ ajouté
   });
 
   const [errors, setErrors] = useState({});
+
+  // ✅ Pré-remplir les champs si on est en mode édition
+    useEffect(() => {
+      if (isEditing && supplierToEdit) {
+        setFormData({
+          name: supplierToEdit.name || "",
+          email: supplierToEdit.email || "",
+          phone: supplierToEdit.phone || "",
+          main_product: supplierToEdit.main_product || "",
+          takes_back_returns: supplierToEdit.takes_back_returns || false,
+        });
+      }
+        }, [isEditing, supplierToEdit]);
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -25,16 +41,22 @@ const AddSupplierModal = ({ onClose, onSupplierAdded }) => {
     e.preventDefault();
     setErrors({});
     try {
-      const response = await addSupplier(formData);
-      toast.success("Fournisseur ajouté avec succès !");
-      onSupplierAdded(response.data);
+      if (isEditing) {
+        await updateSupplier(supplierToEdit.id, formData);
+        toast.success("✅ Fournisseur mis à jour !");
+      } else {
+        const response = await addSupplier(formData);
+        onSupplierAdded(response.data);
+        toast.success("✅ Fournisseur ajouté !");
+      }
       onClose();
     } catch (error) {
+      console.error("Erreur API :", error);
       if (error.response?.status === 422) {
         setErrors(error.response.data.errors || {});
-        toast.error("Erreur de validation");
+        toast.error("Erreur de validation !");
       } else {
-        toast.error("Erreur lors de l’ajout du fournisseur");
+        toast.error("Erreur lors de l’enregistrement du fournisseur !");
       }
     }
   };
