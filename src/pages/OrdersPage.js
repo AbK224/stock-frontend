@@ -134,7 +134,7 @@ const OrdersPage = () => {
   return (
     <div style={{ padding: "20px" }}>
       <Toaster position="top-right" />
-      <h2>📦 Orders List</h2>
+      <h2>📦 Liste des commandes</h2>
       <button
         onClick={() => setShowModal(true)}
         style={{
@@ -147,7 +147,7 @@ const OrdersPage = () => {
           cursor: "pointer",
         }}
       >
-        ➕ Add Order
+        ➕ Ajouter une commande
       </button>
 
       {/* Bouton Historique */}
@@ -167,83 +167,71 @@ const OrdersPage = () => {
       </button>
 
       {/* Tableau */}
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
-        <thead>
-          <tr>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Product</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Order Value (F CFA)</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Quantity</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Order ID</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Expected Delivery</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Status</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Action</th>
+      <div className="table-container">
 
-          </tr>
-        </thead>
-        <tbody>
-          {filteredOrders.length > 0 ? (
-            filteredOrders.map((order) => (
-              <tr key={order.id}>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  {order.product?.name || "-"}
-                </td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                   {order.order_value} 
-                </td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  {order.quantity} {order.unit || "units"}
-                </td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  #{String(order.id).padStart(4, "0")}
-                </td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  {formatDate(order.expected_delivery_date)}
-                </td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  <span style={getStatusStyle(order.status)}>{order.status}</span>
-                </td>
-
-              {/* ✅ Actions */}
-              <td style={{ ...{ border: "1px solid #ddd", padding: "8px" }, textAlign: "center" }}>
-                <button
-                  onClick={() => handleEdit(order)}
-                  style={{
-                    marginRight: "8px",
-                    backgroundColor: "#007bff",
-                    color: "#fff",
-                    border: "none",
-                    padding: "5px 10px",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
-                >
-                  ✏️ Modifier
-                </button>
-                <button
-                  onClick={() => handleDelete(order.id)}
-                  style={{
-                    backgroundColor: "#dc3545",
-                    color: "#fff",
-                    border: "none",
-                    padding: "5px 10px",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
-                >
-                  🗑️ Supprimer
-                </button>
-              </td>
-              </tr>
-            ))
-          ) : (
+        <table className="custom-table" >
+          <thead>
             <tr>
-              <td colSpan="6" style={{ textAlign: "center", padding: "8px" }}>
-                Aucune commande trouvée.
-              </td>
+              <th>Product</th>
+              <th>Order Value (F CFA)</th>
+              <th>Quantity</th>
+              <th>Order ID</th>
+              <th>Expected Delivery</th>
+              <th>Status</th>
+              <th>Action</th>
+
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredOrders.length > 0 ? (
+              filteredOrders.map((order) => (
+                <tr key={order.id}>
+                  <td>
+                    {order.product?.name || "-"}
+                  </td>
+                  <td>
+                    {order.order_value} 
+                  </td>
+                  <td>
+                    {order.quantity} {order.unit || "units"}
+                  </td>
+                  <td>
+                    #{String(order.id).padStart(4, "0")}
+                  </td>
+                  <td>
+                    {formatDate(order.expected_delivery_date)}
+                  </td>
+                  <td>
+                    <span style={getStatusStyle(order.status)}>{order.status}</span>
+                  </td>
+
+                {/* ✅ Actions */}
+                <td className="table-actions">
+                  <button
+                    onClick={() => handleEdit(order)}
+                    className="btn-edit"
+                  >
+                    ✏️ Modifier
+                  </button>
+                  <button
+                    onClick={() => handleDelete(order.id)}
+                    className="btn-delete"
+                  >
+                    🗑️ Supprimer
+                  </button>
+                </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" style={{ textAlign: "center", padding: "8px" }}>
+                  Aucune commande trouvée.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* Pagination */}
       <div

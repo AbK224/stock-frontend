@@ -88,27 +88,8 @@ const AddOrderModal = ({ onClose, onOrderAdded }) => {
   };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: "#fff",
-          padding: "20px",
-          borderRadius: "10px",
-          width: "400px",
-        }}
-      >
+   <div className="modal-overlay">
+      <div className="modal-container">
         <h3>🆕 Nouvelle commande</h3>
         <form onSubmit={handleSubmit}>
           <label>Produit :</label>
@@ -174,14 +155,7 @@ const AddOrderModal = ({ onClose, onOrderAdded }) => {
             <button
               type="submit"
               disabled={loading}
-              style={{
-                backgroundColor: "#0ea5e9",
-                color: "white",
-                border: "none",
-                padding: "8px 12px",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
+              className="btn-primary"
             >
               {loading ? "Ajout..." : "Ajouter"}
             </button>
@@ -189,14 +163,7 @@ const AddOrderModal = ({ onClose, onOrderAdded }) => {
             <button
               type="button"
               onClick={onClose}
-              style={{
-                backgroundColor: "#ccc",
-                color: "black",
-                border: "none",
-                padding: "8px 12px",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
+              className="btn-secondary"
             >
               Annuler
             </button>

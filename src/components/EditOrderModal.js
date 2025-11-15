@@ -38,29 +38,8 @@ const EditOrderModal = ({ order, onClose, onOrderUpdated }) => {
   };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100vw",
-        height: "100vh",
-        backgroundColor: "rgba(0,0,0,0.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 9999,
-      }}
-    >
-      <div
-        style={{
-          background: "#fff",
-          padding: "20px",
-          borderRadius: "8px",
-          width: "400px",
-          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-        }}
-      >
+  <div className="modal-overlay">
+      <div className="modal-container">
         <h3 style={{ marginBottom: "15px", textAlign: "center" }}>
           Modifier la commande #{order.id}
         </h3>
@@ -122,14 +101,7 @@ const EditOrderModal = ({ order, onClose, onOrderUpdated }) => {
             <button
               type="button"
               onClick={onClose}
-              style={{
-                padding: "8px 12px",
-                backgroundColor: "#6c757d",
-                color: "#fff",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
+              className="btn-secondary"
             >
               Annuler
             </button>
@@ -137,14 +109,7 @@ const EditOrderModal = ({ order, onClose, onOrderUpdated }) => {
             <button
               type="submit"
               disabled={loading}
-              style={{
-                padding: "8px 12px",
-                backgroundColor: "#007bff",
-                color: "#fff",
-                border: "none",
-                borderRadius: "5px",
-                cursor: loading ? "not-allowed" : "pointer",
-              }}
+              className="btn-primary"
             >
               {loading ? "Enregistrement..." : "Enregistrer"}
             </button>

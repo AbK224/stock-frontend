@@ -137,15 +137,7 @@ const InventoryPage = () => {
             {/* Bouton pour ouvrir la modale d’ajout */}
             <button
                 onClick={() => setShowModal(true)}
-                style={{
-                    marginBottom: "20px",
-                    padding: "8px 12px",
-                    backgroundColor: "#28a745",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                }}
+                className="btn-add"
             >
                 Ajouter un produit
             </button>
@@ -153,85 +145,73 @@ const InventoryPage = () => {
             {/* Champ de recherche */}
             <input
                 type="text"
+                className="search-input"
                 placeholder="Rechercher un produit..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 style={{ marginBottom: "20px", padding: "8px", width: "300px" }}
             />
 
+            <div className="table-container">
             {/* Tableau des produits */}
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead>
-                    <tr>
-                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Nom</th>
-                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Prix</th>
-                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Quantité</th>
-                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Seuil</th>
-                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Date d’expiration</th>
-                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Disponibilité</th>
-                        <th style={{ border: "1px solid #ddd", padding: "8px" }}>Action</th>
+                <table className="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Prix</th>
+                            <th>Quantité</th>
+                            <th>Seuil</th>
+                            <th>Date d’expiration</th>
+                            <th>Disponibilité</th>
+                            <th>Action</th>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredProducts.length > 0 ? (
-                        filteredProducts.map((product) => (
-                            <tr key={product.id}>
-                                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.name}</td>
-                                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.buying_price} F CFA</td>
-                                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.stock_quantity}</td>
-                                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.treshold_quantity}</td>
-                                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{product.expiration_date}</td>
-                                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                                    {product.stock_quantity === 0 ? (
-                                        <span style={{ color: "orange" }}>Out of stock</span>
-                                    ) : product.stock_quantity <= product.treshold_quantity ? (
-                                        <span style={{ color: "red" }}>Rupture de stock</span>
-                                    ) : (
-                                        <span style={{ color: "green" }}>In Stock</span>
-                                    )}
-                                </td>
-                                  {/* ✅ Actions */}
-                                <td style={{ ...{ border: "1px solid #ddd", padding: "8px" }, textAlign: "center" }}>
-                                    <button
-                                    onClick={() => handleEdit(product)}
-                                    style={{
-                                        marginRight: "8px",
-                                        backgroundColor: "#007bff",
-                                        color: "#fff",
-                                        border: "none",
-                                        padding: "5px 10px",
-                                        borderRadius: "5px",
-                                        cursor: "pointer",
-                                    }}
-                                    >
-                                    ✏️ Modifier
-                                    </button>
-                                    <button
-                                    onClick={() => handleDelete(product.id)}
-                                    style={{
-                                        backgroundColor: "#dc3545",
-                                        color: "#fff",
-                                        border: "none",
-                                        padding: "5px 10px",
-                                        borderRadius: "5px",
-                                        cursor: "pointer",
-                                    }}
-                                    >
-                                    🗑️ Supprimer
-                                    </button>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredProducts.length > 0 ? (
+                            filteredProducts.map((product) => (
+                                <tr key={product.id}>
+                                    <td>{product.name}</td>
+                                    <td>{product.buying_price} F CFA</td>
+                                    <td>{product.stock_quantity}</td>
+                                    <td>{product.treshold_quantity}</td>
+                                    <td>{product.expiration_date}</td>
+                                    <td>
+                                        {product.stock_quantity === 0 ? (
+                                            <span style={{ color: "orange" }}>Out of stock</span>
+                                        ) : product.stock_quantity <= product.treshold_quantity ? (
+                                            <span style={{ color: "red" }}>Rupture de stock</span>
+                                        ) : (
+                                            <span style={{ color: "green" }}>In Stock</span>
+                                        )}
+                                    </td>
+                                    {/* ✅ Actions */}
+                                    <td className="table-actions">
+                                        <button
+                                        onClick={() => handleEdit(product)}
+                                        className="btn-edit"
+                                        >
+                                        ✏️ Modifier
+                                        </button>
+                                        <button
+                                        onClick={() => handleDelete(product.id)}
+                                        className="btn-delete"
+                                        >
+                                        🗑️ Supprimer
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="6" style={{ textAlign: "center", padding: "8px" }}>
+                                    Aucun produit trouvé.
                                 </td>
                             </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan="6" style={{ textAlign: "center", padding: "8px" }}>
-                                Aucun produit trouvé.
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
+                        )}
+                    </tbody>
+                </table>
+            </div>
 
             {/* Pagination */}
             <div

@@ -36,39 +36,13 @@ const Register = () => {
   // rendu du formulaire
 
   return (
-    <div style={{ width: "400px", margin: "auto", marginTop: "40px" }}>
-      <h2>Créer un compte</h2>
+    <div className="login-container">
+      <div className="login-box">
+      <h2>Inscription</h2>
 
       {/* ✅ Message de succès */}
-      {message && (
-        <div
-          style={{
-            backgroundColor: "#d4edda",
-            color: "#155724",
-            padding: "10px",
-            borderRadius: "5px",
-            marginBottom: "15px",
-          }}
-        >
-          {message}
-        </div>
-      )}
-
-      {/* ⚠️ Message d’erreur */}
-      {errorMessage && (
-        <div
-          style={{
-            backgroundColor: "#f8d7da",
-            color: "#721c24",
-            padding: "10px",
-            borderRadius: "5px",
-            marginBottom: "15px",
-          }}
-        >
-          {errorMessage}
-        </div>
-      )}
-
+     {message && <div className="success-msg">{message}</div>}
+      {errorMessage && <div className="error-msg">{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -104,13 +78,15 @@ const Register = () => {
           required
         />
         <br />
-        <button type="submit">S'inscrire</button>
+        <button type="submit" className="login-btn">S'inscrire</button>
       </form>
         <p>
             Déjà un compte ? <a href="/connexion">Connectez-vous</a>
         </p>
        
     </div>
+    </div>
+
   );
 };
 

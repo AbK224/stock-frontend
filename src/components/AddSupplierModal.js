@@ -21,7 +21,7 @@ const AddSupplierModal = ({ onClose, onSupplierAdded, supplierToEdit }) => {
         setFormData({
           name: supplierToEdit.name || "",
           email: supplierToEdit.email || "",
-          phone: supplierToEdit.phone || "",
+          phone: supplierToEdit.Phone || "",
           main_product: supplierToEdit.main_product || "",
           takes_back_returns: supplierToEdit.takes_back_returns || false,
         });
@@ -62,27 +62,8 @@ const AddSupplierModal = ({ onClose, onSupplierAdded, supplierToEdit }) => {
   };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: "#fff",
-          padding: "20px",
-          borderRadius: "10px",
-          width: "400px",
-        }}
-      >
+    <div className="modal-overlay">
+      <div className="modal-container">
         <h3>Ajouter un fournisseur</h3>
         <form onSubmit={handleSubmit}>
           <label>Nom :</label>
@@ -139,8 +120,8 @@ const AddSupplierModal = ({ onClose, onSupplierAdded, supplierToEdit }) => {
               justifyContent: "space-between",
             }}
           >
-            <button type="submit">Ajouter</button>
-            <button type="button" onClick={onClose}>
+            <button type="submit" className="btn-primary">Ajouter</button>
+            <button type="button" className="btn-secondary" onClick={onClose}>
               Annuler
             </button>
           </div>

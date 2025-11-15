@@ -15,6 +15,8 @@ import Dashboard from "./pages/dashboard"; // 🆕 à créer
 import Sidebar from "./components/SideBar";
 import SuppliersPage from "./pages/SuppliersPage";
 import OrdersPage from "./pages/OrdersPage";
+import './App.css';
+
 
 // 🔹 Composant qui affiche la Sidebar seulement si l’utilisateur est connecté
 const Layout = ({ children }) => {

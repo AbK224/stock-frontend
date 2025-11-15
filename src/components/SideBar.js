@@ -41,22 +41,10 @@ const Sidebar = () => {
 
   return (
     <div
-      style={{
-        width: "230px",
-        height: "100vh",
-        backgroundColor: "#1E293B",
-        color: "white",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        position: "fixed",
-        left: 0,
-        top: 0,
-        padding: "20px 10px",
-      }}
+     className="sidebar"
     >
       <div>
-        <h2 style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "30px", textAlign: "center" }}>
+        <h2 className="sidebar-menu">
           🏪 MyStore
         </h2>
 
@@ -64,45 +52,19 @@ const Sidebar = () => {
           <NavLink
             key={item.name}
             to={item.path}
-            style={({ isActive }) => ({
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-              padding: "10px 15px",
-              marginBottom: "8px",
-              borderRadius: "8px",
-              backgroundColor: isActive ? "#334155" : "transparent",
-              color: isActive ? "#38bdf8" : "#f1f5f9",
-              textDecoration: "none",
-              fontWeight: isActive ? "bold" : "normal",
-              transition: "all 0.2s ease",
-            })}
+           className={({ isActive }) =>
+              isActive ? "sidebar-item sidebar-item-active" : "sidebar-item"
+            }
           >
             {item.icon}
             {item.name}
           </NavLink>
         ))}
       </div>
-         <div style={{ borderTop: "1px solid #334155", paddingTop: "15px" }}>
+         <div className="sidebar-logout">
         <button
           onClick={handleLogout}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "8px",
-            width: "100%",
-            padding: "10px 15px",
-            border: "none",
-            borderRadius: "8px",
-            backgroundColor: "#dc2626",
-            color: "#fff",
-            fontWeight: "bold",
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-          }}
-          onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#b91c1c")}
-          onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#dc2626")}
+          className="logout-btn"
         >
           <LogOut size={18} /> Déconnexion
         </button>
