@@ -79,7 +79,7 @@ const SuppliersPage = () => {
   const handleDelete = async (id) => {
   const result = await Swal.fire(
     {
-    title: "Supprimer cette commande ?",
+    title: "Supprimer ce fournisseur ?",
     text: "Cette action est irréversible.",
     icon: "warning",
     showCancelButton: true,
@@ -146,76 +146,62 @@ const SuppliersPage = () => {
         onChange={(e) => setSearchTerm(e.target.value)}
         style={{ marginBottom: "20px", padding: "8px", width: "300px" }}
       />
+      <div className="table-container">
+        <table className="custom-table">
+          <thead>
+            <tr>
+              <th>Supplier Name</th>
+              <th>Product</th>
+              <th>Contact number</th>
+              <th>Email</th>
+              <th>accepte retour ?</th>
+              <th>On the way</th>
+              <th>Action</th>
 
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
-        <thead>
-          <tr>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Supplier Name</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Product</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Contact number</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Email</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>accepte retour ?</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>On the way</th>
-            <th style={{ border: "1px solid #ddd", padding: "8px" }}>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredSuppliers.length > 0 ? (
+              filteredSuppliers.map((s) => (
+                <tr key={s.id}>
+                  <td>{s.name}</td>
+                  <td>{s.main_product}</td>
+                  <td>{s.Phone}</td>
+                  <td>{s.email}</td>
 
-          </tr>
-        </thead>
-        <tbody>
-          {filteredSuppliers.length > 0 ? (
-            filteredSuppliers.map((s) => (
-              <tr key={s.id}>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{s.name}</td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{s.main_product}</td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{s.Phone}</td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{s.email}</td>
-
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  {s.takes_back_returns ? "Oui" : "Non"}
-                </td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                 {s.on_the_way_count ?? 0}
-                </td>
-                 {/* ✅ Actions */}
-                <td style={{ ...{ border: "1px solid #ddd", padding: "8px" }, textAlign: "center" }}>
-                    <button
-                    onClick={() => handleEdit(s)}
-                    style={{
-                        marginRight: "8px",
-                        backgroundColor: "#007bff",
-                        color: "#fff",
-                        border: "none",
-                        padding: "5px 10px",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                    }}
-                    >
-                    ✏️ Modifier
-                    </button>
-                    <button
-                    onClick={() => handleDelete(s.id)}
-                    style={{
-                        backgroundColor: "#dc3545",
-                        color: "#fff",
-                        border: "none",
-                        padding: "5px 10px",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                    }}
-                    >
-                    🗑️ Supprimer
-                    </button>
+                  <td>
+                    {s.takes_back_returns ? "Oui" : "Non"}
+                  </td>
+                  <td>
+                  {s.on_the_way_count ?? 0}
+                  </td>
+                  {/* ✅ Actions */}
+                  <td className="table-actions">
+                      <button
+                      onClick={() => handleEdit(s)}
+                      className="btn-edit"
+                      >
+                      ✏️ Modifier
+                      </button>
+                      <button
+                      onClick={() => handleDelete(s.id)}
+                      className="btn-delete"
+                      >
+                      🗑️ Supprimer
+                      </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" style={{ textAlign: "center", padding: "8px" }}>
+                  Aucun fournisseur trouvé.
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="4" style={{ textAlign: "center", padding: "8px" }}>
-                Aucun fournisseur trouvé.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* pagination */}
       <div

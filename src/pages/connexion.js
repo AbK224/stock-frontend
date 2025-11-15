@@ -32,36 +32,12 @@ const Connexion = () => {
     };
   // rendu du formulaire
   return (
-    <div style={{ width: "400px", margin: "auto", marginTop: "40px" }}>
-      <h2>Se connecter</h2>
+    <div className="login-container">
+      <div className="login-box">
+        <h2>🔐 Connexion</h2>
         {/* ✅ Message de succès */}
-        {message && (
-            <div
-                style={{
-                    backgroundColor: "#d4edda",
-                    color: "#155724",
-                    padding: "10px",
-                    borderRadius: "5px",
-                    marginBottom: "15px",
-                }}
-            >
-                {message}
-            </div>
-        )}
-        {/* ⚠️ Message d’erreur */}
-        {errorMessage && (
-            <div
-                style={{
-                    backgroundColor: "#f8d7da",
-                    color: "#721c24",
-                    padding: "10px",
-                    borderRadius: "5px",
-                    marginBottom: "15px",
-                }}
-            >   
-                {errorMessage}
-            </div>
-        )}  
+        {message && <div className="success-msg">{message}</div>}
+        {errorMessage && <div className="error-msg">{errorMessage}</div>}
         <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -79,13 +55,15 @@ const Connexion = () => {
             required
         />
         <br />
-         <a href="/dashboard"><button type="submit">Se connecter</button></a>
+         <a href="/dashboard"><button type="submit" className="login-btn">Se connecter</button></a>
        
         </form>
         <p>
             Pas encore de compte ? <a href="/register">Inscrivez-vous</a>
         </p>
     </div>
+    </div>
+
   );
 };
 

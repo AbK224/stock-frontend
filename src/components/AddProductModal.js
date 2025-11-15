@@ -66,153 +66,118 @@ const AddProductModal = ({ onClose, onProductAdded, categories, suppliers, produ
   };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: "#fff",
-          padding: "20px",
-          borderRadius: "10px",
-          width: "420px",
-        }}
-      >
-        <h3>{isEditing ? "Modifier le produit" : "Ajouter un produit"}</h3>
-        <form onSubmit={handleSubmit}>
-          <label>Nom :</label>
-          <input
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-          {errors.name && <p style={{ color: "red" }}>{errors.name[0]}</p>}
+   
+      <div className="modal-overlay">
+      <div className="modal-container">
+          <h3>{isEditing ? "Modifier le produit" : "Ajouter un produit"}</h3>
+          
+          <form onSubmit={handleSubmit}>
+            <label>Nom :</label>
+            <input
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+            {errors.name && <p style={{ color: "red" }}>{errors.name[0]}</p>}
 
-          <label>Catégorie :</label>
-          <select
-            name="category_id"
-            value={formData.category_id}
-            onChange={handleChange}
-            required
-          >
-            <option value="">-- Sélectionner --</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-          {errors.category_id && <p style={{ color: "red" }}>{errors.category_id[0]}</p>}
-
-          <label>Fournisseur :</label>
-          <select
-            name="supplier_id"
-            value={formData.supplier_id}
-            onChange={handleChange}
-            required
-          >
-            <option value="">-- Sélectionner --</option>
-            {Array.isArray(suppliers) &&
-              suppliers.map((sup) => (
-                <option key={sup.id} value={sup.id}>
-                  {sup.name}
+            <label>Catégorie :</label>
+            <select
+              name="category_id"
+              value={formData.category_id}
+              onChange={handleChange}
+              required
+            >
+              <option value="">-- Sélectionner --</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
                 </option>
               ))}
-          </select>
-          {errors.supplier_id && <p style={{ color: "red" }}>{errors.supplier_id[0]}</p>}
+            </select>
+            {errors.category_id && <p style={{ color: "red" }}>{errors.category_id[0]}</p>}
 
-          <label>Prix d’achat :</label>
-          <input
-            type="number"
-            name="buying_price"
-            value={formData.buying_price}
-            onChange={handleChange}
-            required
-          />
-
-          <label>Prix de vente :</label>
-          <input
-            type="number"
-            name="selling_price"
-            value={formData.selling_price}
-            onChange={handleChange}
-            required
-          />
-
-          <label>Quantité :</label>
-          <input
-            type="number"
-            name="stock_quantity"
-            value={formData.stock_quantity}
-            onChange={handleChange}
-            required
-          />
-
-          <label>Seuil d’alerte :</label>
-          <input
-            type="number"
-            name="treshold_quantity"
-            value={formData.treshold_quantity}
-            onChange={handleChange}
-            required
-          />
-
-          <label>Date d’expiration :</label>
-          <input
-            type="date"
-            name="expiration_date"
-            value={formData.expiration_date}
-            onChange={handleChange}
-          />
-
-          <div
-            style={{
-              marginTop: "15px",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <button
-              type="submit"
-              style={{
-                backgroundColor: isEditing ? "#007bff" : "#28a745",
-                color: "#fff",
-                padding: "8px 14px",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
+            <label>Fournisseur :</label>
+            <select
+              name="supplier_id"
+              value={formData.supplier_id}
+              onChange={handleChange}
+              required
             >
-              {isEditing ? "Mettre à jour" : "Ajouter"}
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              style={{
-                backgroundColor: "#6c757d",
-                color: "#fff",
-                padding: "8px 14px",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
+              <option value="">-- Sélectionner --</option>
+              {Array.isArray(suppliers) &&
+                suppliers.map((sup) => (
+                  <option key={sup.id} value={sup.id}>
+                    {sup.name}
+                  </option>
+                ))}
+            </select>
+            {errors.supplier_id && <p style={{ color: "red" }}>{errors.supplier_id[0]}</p>}
+
+            <label>Prix d’achat :</label>
+            <input
+              type="number"
+              name="buying_price"
+              value={formData.buying_price}
+              onChange={handleChange}
+              required
+            />
+
+            <label>Prix de vente :</label>
+            <input
+              type="number"
+              name="selling_price"
+              value={formData.selling_price}
+              onChange={handleChange}
+              required
+            />
+
+            <label>Quantité :</label>
+            <input
+              type="number"
+              name="stock_quantity"
+              value={formData.stock_quantity}
+              onChange={handleChange}
+              required
+            />
+
+            <label>Seuil d’alerte :</label>
+            <input
+              type="number"
+              name="treshold_quantity"
+              value={formData.treshold_quantity}
+              onChange={handleChange}
+              required
+            />
+
+            <label>Date d’expiration :</label>
+            <input
+              type="date"
+              name="expiration_date"
+              value={formData.expiration_date}
+              onChange={handleChange}
+            />
+
+            <div
+              className="modal-actions"
             >
-              Annuler
-            </button>
-          </div>
-        </form>
+              <button
+                type="submit"
+                className="btn-primary"
+              >
+                {isEditing ? "Mettre à jour" : "Ajouter"}
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="btn-secondary"
+              >
+                Annuler
+              </button>
+            </div>
+          </form>
       </div>
-    </div>
+      </div>
   );
 };
 
